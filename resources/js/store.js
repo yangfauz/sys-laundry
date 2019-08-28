@@ -16,7 +16,8 @@ const store = new Vuex.Store({
         auth,
         outlet,
         courier,
-        product
+        product,
+        user
     },
   	//STATE HAMPIR SERUPA DENGAN PROPERTY DATA DARI COMPONENT HANYA SAJA DAPAT DIGUNAKAN SECARA GLOBAL
     state: {
