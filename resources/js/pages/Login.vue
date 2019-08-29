@@ -80,7 +80,7 @@ export default {
                     this.$router.push({ name: 'home' })
                 }
             })
-        }
+        },
         destroyed() {
             this.getUserLogin()
         }
