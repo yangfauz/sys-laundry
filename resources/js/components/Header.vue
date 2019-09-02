@@ -3,7 +3,7 @@
         <nav class="navbar navbar-static-top">
             <div class="container">
                 <div class="navbar-header">
-                    <router-link to="/" class="navbar-brand"><b>SYS</b>Laundry</router-link>
+                    <router-link to="/" class="navbar-brand"><b>DW</b>Laundry</router-link>
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
                         <i class="fa fa-bars"></i>
                     </button>
@@ -15,7 +15,9 @@
                         <li v-if="$can('read outlets')"><router-link :to="{ name: 'outlets.data' }">Outlets</router-link></li>
                         <li v-if="$can('read couriers')"><router-link :to="{ name: 'couriers.data' }">Couriers</router-link></li>
                         <li v-if="$can('read products')"><router-link :to="{ name: 'products.data' }">Products</router-link></li>
+                        <li><router-link :to="{ name: 'customers.data' }">Customer</router-link></li>
                         <li><router-link :to="{ name: 'expenses.data' }">Expenses</router-link></li>
+                        <li><router-link :to="{ name: 'transactions.add' }">Transaction</router-link></li>
                         <li class="dropdown" v-if="authenticated.role == 0">
                             <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Settings <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
@@ -23,39 +25,27 @@
                             </ul>
                         </li>
                     </ul>
-                    <form class="navbar-form navbar-left" role="search">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="navbar-search-input" placeholder="Search">
-                        </div>
-                    </form>
                 </div>
                 <div class="navbar-custom-menu">
                     <ul class="nav navbar-nav">
                         <li class="dropdown messages-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
-                                
-                                <!-- FUNGSI INI UNTUK MENGHITUNG JUMLAH DATA NOTIFIKASI YANG ADA -->
                                 <span class="label label-success">{{ notifications.length }}</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="header">You have {{ notifications.length }} messages</li>
                                 <li>
                                     <ul class="menu" v-if="notifications.length > 0">
-                                        
-                                        <!-- KITA MELAKUKAN LOOPING TERHADAP DATA NOTIFIKASI YANG DISIMPAN KE DALAM STATE NOTIFICATIONS -->
                                         <li v-for="(row, index) in notifications" :key="index">
                                             <a href="javascript:void(0)" @click="readNotif(row)">
                                                 <div class="pull-left">
                                                     <img src="https://via.placeholder.com/160" class="img-circle" alt="User Image">
                                                 </div>
                                                 <h4>
-                                                    <!-- TAMPILKAN NAMA PENGIRIM NOTIFIKASI -->
                                                     {{ row.data.sender_name }}
-                                                    <!-- TAMPILKAN WAKTU NOTIFIKASI -->
                                                     <small><i class="fa fa-clock-o"></i> {{ row.created_at | formatDate }}</small>
                                                 </h4>
-                                                <!-- TAMPILKAN JENIS PERMINTAAN NOTIFIKASI -->
                                                 <p>{{ row.data.expenses.description.substr(0, 30) }}</p>
                                             </a>
                                         </li>
@@ -64,7 +54,7 @@
                                 <!-- <li class="footer"><a href="#">See All Messages</a></li> -->
                             </ul>
                         </li>
-                        <li class="dropdown notifications-menu">
+                        <!-- <li class="dropdown notifications-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-bell-o"></i>
                                 <span class="label label-warning">10</span>
@@ -83,47 +73,15 @@
                                 <li class="footer"><a href="#">View all</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown tasks-menu">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <i class="fa fa-flag-o"></i>
-                                <span class="label label-danger">9</span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li class="header">You have 9 tasks</li>
-                                <li>
-                                    <ul class="menu">
-                                        <li>
-                                            <a href="#">
-                                                <h3>
-                                                    Design some buttons
-                                                    <small class="pull-right">20%</small>
-                                                </h3>
-                                                <div class="progress xs">
-                                                    <div class="progress-bar progress-bar-aqua" style="width: 20%" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
-                                                        <span class="sr-only">20% Complete</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="footer">
-                                    <a href="#">View all tasks</a>
-                                </li>
-                            </ul>
-                        </li>
+                         -->
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <img src="https://via.placeholder.com/160" class="user-image" alt="User Image">
-                                
-                                <!-- MODIFIKASI BAGIAN INI -->
                                 <span class="hidden-xs">{{ authenticated.name }}</span>
                             </a>
                             <ul class="dropdown-menu">
                                 <li class="user-header">
                                     <img src="https://via.placeholder.com/160" class="img-circle" alt="User Image">
-                                  
-                                    <!-- MODIFIKASI BAGIAN INI -->
                                     <p>{{ authenticated.name }}</p>
                                 </li>
                                 <li class="user-body">
@@ -141,13 +99,10 @@
                                 </li>
                                 <li class="user-footer">
                                     <div class="pull-left">
-                                            <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                        <a href="#" class="btn btn-default btn-flat">Profile</a>
                                     </div>
                                     <div class="pull-right">
-                                      
-                                        <!-- MODIFIKASI BAGIAN INI -->
                                         <a href="javascript:void(0)" @click="logout" class="btn btn-default btn-flat">Sign out</a>
-                                    
                                     </div>
                                 </li>
                             </ul>

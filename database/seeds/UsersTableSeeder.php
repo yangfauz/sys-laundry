@@ -13,11 +13,11 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'Admin',
-            'email' => 'admin@laundry.com',
+            'name' => 'courier',
+            'email' => 'courier@laundry.com',
             'email_verified_at' => now(),
-            'password' => bcrypt('secret'),
-            'role' => 0
+            'password' => bcrypt('12345678'),
+            'role' => 3
         ]);
     }
 }

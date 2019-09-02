@@ -30,6 +30,14 @@ import CreateExpenses from './pages/expenses/Add.vue'
 import ViewExpenses from './pages/expenses/View.vue'
 import EditExpenses from './pages/expenses/Edit.vue'
 
+import IndexCustomer from './pages/customers/Index.vue'
+import DataCustomer from './pages/customers/Customer.vue'
+import AddCustomer from './pages/customers/Add.vue'
+import EditCustomer from './pages/customers/Edit.vue'
+
+import IndexTransaction from './pages/transaction/Index.vue'
+import AddTransaction from './pages/transaction/Add.vue'
+
 
 Vue.use(Router)
 
@@ -166,6 +174,44 @@ const router = new Router({
 				    component: EditExpenses,
 				    meta: { title: 'Edit Expenses' }
 				},
+		    ]
+		},
+		{
+		    path: '/customers',
+		    component: IndexCustomer,
+		    meta: { requiresAuth: true },
+		    children: [
+		        {
+		            path: '',
+		            name: 'customers.data',
+		            component: DataCustomer,
+		            meta: { title: 'Manage Customers' }
+		        },
+		        {
+				    path: 'add',
+				    name: 'customers.add',
+				    component: AddCustomer,
+				    meta: { title: 'Add New Customers' }
+				},
+				{
+				    path: 'edit/:id',
+				    name: 'customers.edit',
+				    component: EditCustomer,
+				    meta: { title: 'Edit Customer' }
+				},
+		    ]
+		},
+		{
+		    path: '/transactions',
+		    component: IndexTransaction,
+		    meta: { requiresAuth: true },
+		    children: [
+		        {
+		            path: 'create',
+		            name: 'transactions.add',
+		            component: AddTransaction,
+		            meta: { title: 'Create New Transaction' }
+		        },
 		    ]
 		}
 	]
