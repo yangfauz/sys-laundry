@@ -58,7 +58,7 @@
         </div>
         <div class="col-md-12">
             <hr>
-            <button class="btn btn-warning btn-sm" style="margin-bottom: 10px" @click="addProduct">Tambah</button>
+            <button class="btn btn-warning btn-sm" style="margin-bottom: 10px" v-if="filterProduct.length == 0" @click="addProduct">Tambah</button>
             <div class="table-responsive">
                 <table class="table table-bordered table-hover">
                     <thead>
@@ -146,8 +146,13 @@ export default {
         total() {
             //MENJUMLAH SUBTOTAL 
             return _.sumBy(this.transactions.detail, function(o) {
-                return o.subtotal
+                return parseFloat(o.subtotal)
             })
+        },
+        filterProduct() {
+          return _.filter(this.transactions.detail, function(item) {
+              return item.laundry_price == null
+          })
         }
     },
     methods: {
@@ -171,7 +176,9 @@ export default {
         },
         //KETIKA TOMBOL TAMBAHKAN DITEKAN, MAKA AKAN MENAMBAHKAN ITEM BARU
         addProduct() {
-            this.transactions.detail.push({ laundry_price: null, qty: null, price: 0, subtotal: 0 })
+            if (this.filterProduct.length == 0) {
+        this.transactions.detail.push({ laundry_price: null, qty: null, price: 0, subtotal: 0 })
+            }
         },
         //KETIKA TOMBOL HAPUS PADA MASING-MASING ITEM DITEKAN, MAKA AKAN MENGHAPUS BERDASARKAN INDEX DATANYA
         removeProduct(index) {
@@ -198,8 +205,16 @@ export default {
         //KETIKA TOMBOL CREATE TRANSACTION DITEKAN MAKA FUNGSI INI AKAN DIJALANKAN
         submit() {
             this.isSuccess = false
-            //MENGIRIM PERMINTAAN KE SERVER UNTUK MENYIMPAN DATA TRANSAKSI
-            this.createTransaction(this.transactions).then(() => this.isSuccess = true)
+            //FILTER DATANYA DENGAN KONDISI LAUNDRY_PRICE != NULL
+            let filter = _.filter(this.transactions.detail, function(item) {
+                return item.laundry_price != null
+            })
+
+            //KEMUDIAN DIHITUNG, JIKA JUMLAH DATA YANG SUDAH DIFILTER LEBIH DARI 0
+            if (filter.length > 0) {
+                //MAKA INSTRUKSI UNTUK MEMBUAT TRANSAKSI DIJALANKAN
+                this.createTransaction(this.transactions).then(() => this.isSuccess = true)
+            }
         },
         newCustomer() {
             this.isForm = true //MENGUBAH VALUE isForm MENJADI TRUE
@@ -211,6 +226,14 @@ export default {
                 this.transactions.customer_id = res.data
                 this.isForm = false //SET KEMBALI JADI FALSE AGAR FORM TERTUTUP
             })
+        },
+        resetForm() {
+              this.transactions = {
+                  customer_id: null,
+                  detail: [
+                      { laundry_price: null, qty: 1, price: 0, subtotal: 0 }
+                  ]
+              }
         }
     },
     components: {
